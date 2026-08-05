@@ -1,0 +1,682 @@
+/* ============================================
+   ONE SHOT CHALLENGE - Dark Premium Theme
+   ============================================ */
+
+:root {
+    --bg-primary: #0a0a1a;
+    --bg-secondary: #12122a;
+    --bg-card: #1a1a3a;
+    --bg-overlay: rgba(10, 10, 26, 0.95);
+    --accent: #ff6b35;
+    --accent-glow: rgba(255, 107, 53, 0.3);
+    --accent-secondary: #4ecdc4;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0c0;
+    --text-muted: #606080;
+    --success: #4ecdc4;
+    --danger: #ff4757;
+    --gold: #ffd700;
+    --radius: 12px;
+    --radius-lg: 20px;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text-primary);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#game-container {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+#game-container canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* ============================================
+   Loading Screen
+   ============================================ */
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.5s ease;
+}
+
+.loading-screen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.loading-title {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.loading-bar {
+    width: 200px;
+    height: 4px;
+    background: var(--bg-card);
+    border-radius: 2px;
+    margin: 20px auto 0;
+    overflow: hidden;
+}
+
+.loading-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+/* ============================================
+   UI Overlay
+   ============================================ */
+
+.ui-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.ui-overlay:not(.hidden) {
+    pointer-events: all;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ============================================
+   Menu Screens
+   ============================================ */
+
+.menu-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-overlay);
+    animation: fadeIn 0.3s ease;
+}
+
+.menu-content {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+    border-radius: var(--radius-lg);
+    padding: 40px 30px;
+    width: 90%;
+    max-width: 380px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.menu-content.compact {
+    padding: 30px 25px;
+}
+
+.menu-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    color: var(--text-primary);
+}
+
+/* ============================================
+   Game Title
+   ============================================ */
+
+.game-title {
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, var(--accent), #ff8f6b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+}
+
+.game-subtitle {
+    font-size: 1.2rem;
+    letter-spacing: 8px;
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+    font-weight: 300;
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 14px 24px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: var(--transition);
+    outline: none;
+}
+
+.btn:active {
+    transform: scale(0.96);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent), #ff8f6b);
+    color: white;
+    box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 6px 20px var(--accent-glow);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-small {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    width: auto;
+    display: inline-block;
+}
+
+.btn-reward {
+    background: linear-gradient(135deg, var(--gold), #ffaa00);
+    color: #1a1a1a;
+}
+
+.btn-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--bg-card);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon:active {
+    transform: scale(0.9);
+}
+
+.menu-bottom-row {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+/* ============================================
+   Coin Display
+   ============================================ */
+
+.coin-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1.2rem;
+    color: var(--gold);
+    font-weight: 700;
+}
+
+.coin-icon {
+    font-size: 1.3rem;
+}
+
+/* ============================================
+   Settings
+   ============================================ */
+
+.settings-list {
+    margin-bottom: 20px;
+}
+
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+}
+
+.toggle {
+    position: relative;
+    width: 48px;
+    height: 26px;
+    display: inline-block;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-primary);
+    border-radius: 13px;
+    transition: var(--transition);
+}
+
+.slider::before {
+    content: '';
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.toggle input:checked + .slider {
+    background: var(--accent);
+}
+
+.toggle input:checked + .slider::before {
+    transform: translateX(22px);
+}
+
+/* ============================================
+   Shop
+   ============================================ */
+
+.shop-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    justify-content: center;
+}
+
+.tab-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 20px;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.tab-btn.active {
+    background: var(--accent);
+    color: white;
+}
+
+.shop-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.shop-item {
+    aspect-ratio: 1;
+    border-radius: var(--radius);
+    background: var(--bg-primary);
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    padding: 8px;
+    position: relative;
+}
+
+.shop-item.owned {
+    border-color: var(--success);
+}
+
+.shop-item.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.shop-item .price {
+    font-size: 0.7rem;
+    color: var(--gold);
+    margin-top: 4px;
+}
+
+.shop-item .item-preview {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.shop-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    font-weight: 700;
+    color: var(--gold);
+}
+
+/* ============================================
+   Stats
+   ============================================ */
+
+.stats-grid {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.stat-value {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+/* ============================================
+   Achievements
+   ============================================ */
+
+.achievements-grid {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.achievement-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    background: var(--bg-primary);
+}
+
+.achievement-row.unlocked {
+    background: rgba(78, 205, 196, 0.1);
+    border: 1px solid rgba(78, 205, 196, 0.3);
+}
+
+.achievement-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    text-align: center;
+}
+
+.achievement-info {
+    text-align: left;
+    flex: 1;
+}
+
+.achievement-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.achievement-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* ============================================
+   Level Complete
+   ============================================ */
+
+.celebration {
+    animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.level-text {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.complete-text {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--success);
+    margin-bottom: 16px;
+    letter-spacing: 3px;
+}
+
+.reward-display {
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.reward-amount {
+    font-size: 2rem;
+    color: var(--gold);
+    font-weight: 900;
+    margin-bottom: 8px;
+}
+
+.streak-text {
+    color: var(--accent-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+}
+
+/* ============================================
+   HUD
+   ============================================ */
+
+.hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 50;
+    padding: env(safe-area-inset-top, 12px) 16px 16px;
+}
+
+.hud-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+}
+
+.hud-level {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    background: rgba(10, 10, 26, 0.7);
+    padding: 6px 14px;
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+}
+
+.hud-mode {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: rgba(10, 10, 26, 0.7);
+    padding: 4px 10px;
+    border-radius: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.btn-pause {
+    pointer-events: all;
+    background: rgba(10, 10, 26, 0.7);
+    backdrop-filter: blur(8px);
+    border-color: transparent;
+    font-size: 1rem;
+}
+
+.hud-bottom {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hud-coins {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--gold);
+    background: rgba(10, 10, 26, 0.7);
+    padding: 6px 12px;
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+}
+
+.hud-streak {
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 360px) {
+    .game-title { font-size: 2.2rem; }
+    .menu-content { padding: 24px 20px; }
+    .btn { padding: 12px 20px; font-size: 0.9rem; }
+}
+
+@media (min-width: 768px) {
+    .menu-content { max-width: 420px; }
+    .game-title { font-size: 3.2rem; }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 2px;
+}
