@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link data-mgx-overview="icon" rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23ff6b35'/><circle cx='50' cy='50' r='20' fill='%23fff'/></svg>">
+    <title data-mgx-overview="title">One Shot Challenge</title>
+    <meta data-mgx-overview="description" name="description" content="One shot, one chance — test your precision across infinite physics-based levels. Drag to aim, release to fire. Can you hit every target?">
+    
+    <!-- Open Graph -->
+    <meta data-mgx-overview="og:title" property="og:title" content="One Shot Challenge - Physics Puzzle Game">
+    <meta data-mgx-overview="og:description" property="og:description" content="One shot, one chance — test your precision across infinite physics-based levels with instant retry.">
+    <meta data-mgx-overview="og:image" property="og:image" content="https://public-frontend-1300249583.cos.ap-nanjing.myqcloud.com/commonfile/DefaultAppLogo.png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://oneshotchallenge.com">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta data-mgx-overview="twitter:title" name="twitter:title" content="One Shot Challenge - Physics Puzzle Game">
+    <meta data-mgx-overview="twitter:description" name="twitter:description" content="One shot, one chance — test your precision across infinite physics-based levels with instant retry.">
+    <meta data-mgx-overview="twitter:image" name="twitter:image" content="https://public-frontend-1300249583.cos.ap-nanjing.myqcloud.com/commonfile/DefaultAppLogo.png">
+    
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#0a0a1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="canonical" href="https://oneshotchallenge.com">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": "One Shot Challenge",
+        "description": "A physics-based hyper-casual browser game where players aim and fire a single shot per level to hit targets.",
+        "genre": ["Puzzle", "Casual", "Physics"],
+        "gamePlatform": "Web Browser",
+        "applicationCategory": "Game",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+    
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+</head>
+<body>
+    <div id="game-container"></div>
+    
+    <!-- UI Overlays (managed by ui.js) -->
+    <div id="ui-overlay" class="ui-overlay hidden">
+        <!-- Main Menu -->
+        <div id="main-menu" class="menu-screen hidden">
+            <div class="menu-content">
+                <h1 class="game-title">ONE SHOT</h1>
+                <p class="game-subtitle">CHALLENGE</p>
+                <div class="menu-buttons">
+                    <button class="btn btn-primary" id="btn-classic">Classic Mode</button>
+                    <button class="btn btn-secondary" id="btn-endless">Endless Mode</button>
+                    <button class="btn btn-secondary" id="btn-daily">Daily Challenge</button>
+                </div>
+                <div class="menu-bottom-row">
+                    <button class="btn-icon" id="btn-shop" title="Shop">🎨</button>
+                    <button class="btn-icon" id="btn-stats" title="Stats">📊</button>
+                    <button class="btn-icon" id="btn-achievements" title="Achievements">🏆</button>
+                    <button class="btn-icon" id="btn-settings" title="Settings">⚙️</button>
+                </div>
+                <div class="coin-display">
+                    <span class="coin-icon">🪙</span>
+                    <span id="menu-coins">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pause Menu -->
+        <div id="pause-menu" class="menu-screen hidden">
+            <div class="menu-content compact">
+                <h2>PAUSED</h2>
+                <div class="menu-buttons">
+                    <button class="btn btn-primary" id="btn-resume">Resume</button>
+                    <button class="btn btn-secondary" id="btn-restart">Restart</button>
+                    <button class="btn btn-secondary" id="btn-quit">Main Menu</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Menu -->
+        <div id="settings-menu" class="menu-screen hidden">
+            <div class="menu-content compact">
+                <h2>SETTINGS</h2>
+                <div class="settings-list">
+                    <div class="setting-row">
+                        <span>Sound</span>
+                        <label class="toggle"><input type="checkbox" id="toggle-sound" checked><span class="slider"></span></label>
+                    </div>
+                    <div class="setting-row">
+                        <span>Vibration</span>
+                        <label class="toggle"><input type="checkbox" id="toggle-vibration" checked><span class="slider"></span></label>
+                    </div>
+                    <div class="setting-row">
+                        <span>Particles</span>
+                        <label class="toggle"><input type="checkbox" id="toggle-particles" checked><span class="slider"></span></label>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" id="btn-settings-back">Back</button>
+            </div>
+        </div>
+        
+        <!-- Shop -->
+        <div id="shop-menu" class="menu-screen hidden">
+            <div class="menu-content">
+                <h2>SHOP</h2>
+                <div class="shop-tabs">
+                    <button class="tab-btn active" data-tab="balls">Balls</button>
+                    <button class="tab-btn" data-tab="cannons">Cannons</button>
+                </div>
+                <div id="shop-items" class="shop-grid"></div>
+                <div class="shop-footer">
+                    <span class="coin-icon">🪙</span>
+                    <span id="shop-coins">0</span>
+                    <button class="btn btn-small btn-reward" id="btn-watch-ad">Watch Ad +50🪙</button>
+                </div>
+                <button class="btn btn-secondary" id="btn-shop-back">Back</button>
+            </div>
+        </div>
+        
+        <!-- Stats -->
+        <div id="stats-menu" class="menu-screen hidden">
+            <div class="menu-content">
+                <h2>STATISTICS</h2>
+                <div id="stats-list" class="stats-grid"></div>
+                <button class="btn btn-secondary" id="btn-stats-back">Back</button>
+            </div>
+        </div>
+        
+        <!-- Achievements -->
+        <div id="achievements-menu" class="menu-screen hidden">
+            <div class="menu-content">
+                <h2>ACHIEVEMENTS</h2>
+                <div id="achievements-list" class="achievements-grid"></div>
+                <button class="btn btn-secondary" id="btn-achievements-back">Back</button>
+            </div>
+        </div>
+        
+        <!-- Level Complete -->
+        <div id="level-complete" class="menu-screen hidden">
+            <div class="menu-content compact celebration">
+                <h2 class="level-text">LEVEL <span id="complete-level">1</span></h2>
+                <p class="complete-text">COMPLETE!</p>
+                <div class="reward-display">
+                    <span>+<span id="coins-earned">10</span> 🪙</span>
+                </div>
+                <button class="btn btn-primary" id="btn-next-level">Next Level</button>
+            </div>
+        </div>
+        
+        <!-- Daily Reward -->
+        <div id="daily-reward" class="menu-screen hidden">
+            <div class="menu-content compact celebration">
+                <h2>DAILY REWARD!</h2>
+                <p class="reward-amount">+<span id="daily-reward-amount">25</span> 🪙</p>
+                <p class="streak-text">Streak: <span id="daily-streak">1</span> days</p>
+                <button class="btn btn-primary" id="btn-claim-daily">Claim</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- HUD (always visible during gameplay) -->
+    <div id="game-hud" class="hud hidden">
+        <div class="hud-top">
+            <div class="hud-level">Level <span id="hud-level-num">1</span></div>
+            <div class="hud-mode" id="hud-mode">Classic</div>
+            <button class="btn-icon btn-pause" id="btn-pause">⏸</button>
+        </div>
+        <div class="hud-bottom">
+            <div class="hud-coins">🪙 <span id="hud-coins">0</span></div>
+            <div class="hud-streak" id="hud-streak"></div>
+        </div>
+    </div>
+    
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <h1 class="game-title loading-title">ONE SHOT</h1>
+            <p class="game-subtitle">CHALLENGE</p>
+            <div class="loading-bar">
+                <div class="loading-fill" id="loading-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./script.js"></script>
+</body>
+</html>
